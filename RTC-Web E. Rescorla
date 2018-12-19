@@ -341,9 +341,9 @@ Internet-Draft               WebRTC Security                January 2018
    特别重要的是要警惕交叉协议的攻击，在交叉协议攻击中脚本生成某些非Web协议状态机可接受的流量。为了抵御这种形式的攻击，WebSockets采用了一种掩码技术，旨在将线路上的比特流随机化，从而使生成类似已存在协议的流量变得更加困难。
 
 4.  Security for WebRTC Applications
-
+4.  WebRTC应用所带来的安全
 4.1.  Access to Local Devices
-
+	访问本地设备
    As discussed in Section 1, allowing arbitrary sites to initiate calls
    violates the core Web security guarantee; without some access
    restrictions on local devices, any malicious site could simply bug a
@@ -351,20 +351,20 @@ Internet-Draft               WebRTC Security                January 2018
    to initiate calls to arbitrary locations without user consent.  This
    immediately raises the question, however, of what should be the scope
    of user consent.
-
+	如第一节所述，允许任意站点发起呼叫，这违反了核心web安全保障：如果没有对本地设备的访问限制，任何恶意站点都可能会对用户造成问题。在没有用户的同意的情况下，任何站点都不能向任意位置发起呼叫。这就引发了一个问题：用户同意的范围怎么定义。
    In order for the user to make an intelligent decision about whether
    to allow a call (and hence his camera and microphone input to be
    routed somewhere), he must understand either who is requesting
    access, where the media is going, or both.  As detailed below, there
    are two basic conceptual models:
-
+	用户想要对是否允许呼叫（他的摄像头和麦克风输入被路由到某处）做出明智的决定，他就必须了解请求访问的人或者媒体的去向。如下所述，有两种基本的概念模型。
    1.  You are sending your media to entity A because you want to talk
        to Entity A (e.g., your mother).
-
+1.您将媒体发送给实体A因为你想与A交流。
    2.  Entity A (e.g., a calling service) asks to access the user's
        devices with the assurance that it will transfer the media to
        entity B (e.g., your mother)
-
+　　2.实体A（例如呼叫服务）请求访问用户的设备，并保证它将媒体转移到实体B（例如您的母亲）
    In either case, identity is at the heart of any consent decision.
    Moreover, the identity of the party the browser is connecting to is
    all that the browser can meaningfully enforce; if you are calling A,
@@ -376,6 +376,8 @@ Internet-Draft               WebRTC Security                January 2018
    that the browser can enforce.  Even so, there are a variety of
    different consent scenarios that motivate different technical consent
    mechanisms.  We discuss these mechanisms in the sections below.
+	在任何一种情况下，身份都是决定的核心。而且，浏览器连接的一方的身份是所有浏览器都可以执行：如果您正在呼叫A，则A可以简单地将媒体转发给C.同样，如果您授权A 向B发出呼叫，则A可以呼叫C。在任何一种情况下，所有
+ 浏览器都能够验证并检查控制媒体所在位置的任何人的授权。媒体的目标当然可以宣传安全/隐私政策，但这不是 浏览器可以强制执行的。即便如此，还有各种不同的同意方案可以激发不同的技术同意机制。我们将在下面的部分中讨论这些机制。
 
    It's important to understand that consent to access local devices is
    largely orthogonal to consent to transmit various kinds of data over
@@ -387,21 +389,20 @@ Internet-Draft               WebRTC Security                January 2018
    access the camera and microphone at all (hence WebSockets's consent
    mechanism) and similarly we need to be concerned with the site
    accessing the user's camera and microphone even if the data is to be
-
-Rescorla                  Expires July 26, 2018                 [Page 7]
-Internet-Draft               WebRTC Security                January 2018
-
-   sent back to the site via conventional HTTP-based network mechanisms
+	sent back to the site via conventional HTTP-based network mechanisms
    such as HTTP POST.
+同意访问本地设备与同意通过网络传输各种数据是正交的（参见4.2节）了解这点很重要。是否允许访问设备主要取决于保护用户的隐私免受恶意站点的影响。通过对比，同意传输网络是用来防止用户浏览器被利用去攻击它本地的网络。因此我们需要确保同意通信即使该站点根本不能接入摄像头和麦克风（websockets同意机制），同样我们需要关注访问用户的摄像头和麦克风的网站，即使数据是
+通过传统的基于HTTP的网络机制发送回网站，例如HTTP POST.
 
 4.1.1.  Threats from Screen Sharing
-
+4.1.1屏幕共享带来的威胁
    In addition to camera and microphone access, there has been demand
    for screen and/or application sharing functionality.  Unfortunately,
    the security implications of this functionality are much harder for
    users to intuitively analyze than for camera and microphone access.
    (See http://lists.w3.org/Archives/Public/public-
    webrtc/2013Mar/0024.html for a full analysis.)
+	除了摄像头和麦克风的访问外，还需要屏幕和应用程序共享功能。不幸的的是，与摄像头和麦克风相比，这种功能的安全隐患对于用户来说更难以直观地分析（具体请参考 http://lists.w3.org/Archives/Public/public-webrtc/2013Mar/0024.html）
 
    The most obvious threats are simply those of "oversharing".  I.e.,
    the user may believe they are sharing a window when in fact they are
@@ -410,7 +411,8 @@ Internet-Draft               WebRTC Security                January 2018
    existing screen sharing technologies and is made somewhat worse if a
    partially trusted site is responsible for asking for the resource to
    be shared rather than having the user propose it.
-
+	
+	最明显的威胁就是“过度分享”。也就是说，当用户实际上正在共享应用程序时，用户可能认为他们正在共享窗口或者可能忘记他们正在共享整个屏幕，图标，通知等等。这已经成为现有屏幕共享技术的一个问题，如果部分受信任的站点负责要求
    A less obvious threat involves the impact of screen sharing on the
    Web security model.  A key part of the Same Origin Policy is that
    HTML or JS from site A can reference content from site B and cause
@@ -423,32 +425,29 @@ Internet-Draft               WebRTC Security                January 2018
    displayed content.  A more sophisticated attack would be open up a
    source view window to a site and use the screen sharing result to
    view anti cross-site request forgery tokens.
-
-   These threats suggest that screen/application sharing might need a
+	   These threats suggest that screen/application sharing might need a
    higher level of user consent than access to the camera or microphone.
+不太明显的威胁是对web安全模型的影响。同源策略的一个关键部分是来自站点A的HTML或JS可以可以引用站点B中的内容并导致浏览器加载它，但是（除非明确允许）看不到结果。但是，如果来自站点的web应用程序屏幕共享浏览器，则会违反该不变量，从而导致严重的安全后果。例如，攻击者网站可能会请求屏幕共享，然后使用屏幕共享来快速打开用户银行或网络邮件账户的新窗口，以读取生产的显示内容。更复杂的攻击将打开一个站点的源视图窗口，并使用屏幕共享结果来查看反跨站点请求伪造令牌。这些威胁表明与访问摄像头或麦克风相比，屏幕、应用程序共享可能需要更高级别的用户同意。
 
 4.1.2.  Calling Scenarios and User Expectations
-
+调用方案和用户期望
    While a large number of possible calling scenarios are possible, the
    scenarios discussed in this section illustrate many of the
    difficulties of identifying the relevant scope of consent.
-
+尽管可能存在大量可能的调用方案，但本节中讨论的方案说明了识别相关同意范围的许多困难。
 4.1.2.1.  Dedicated Calling Services
-
+专用呼叫服务
    The first scenario we consider is a dedicated calling service.  In
    this case, the user has a relationship with a calling site and
    repeatedly makes calls on it.  It is likely that rather than having
    to give permission for each call that the user will want to give the
-
-Rescorla                  Expires July 26, 2018                 [Page 8]
-Internet-Draft               WebRTC Security                January 2018
-
    calling service long-term access to the camera and microphone.  This
    is a natural fit for a long-term consent mechanism (e.g., installing
    an app store "application" to indicate permission for the calling
    service.)  A variant of the dedicated calling service is a gaming
    site (e.g., a poker site) which hosts a dedicated calling service to
    allow players to call each other.
+我们考虑的第一个方案是专用呼叫服务。在这种情况下，用户与呼叫站点有关系并反复对其进行呼叫。很可能不是必须允许用户想要给予每次通话呼叫服务长期访问摄像头和麦克风。这自然适合于长期同意机制（例如，安装app store“应用程序”以指示对呼叫服务的许可）专用呼叫服务的变体是游戏站点（例如，扑克站点）。提供专用的呼叫服务，允许玩家互相呼叫。
 
    With any kind of service where the user may use the same service to
    talk to many different people, there is a question about whether the
@@ -463,9 +462,9 @@ Internet-Draft               WebRTC Security                January 2018
    willing to allow a calling site to in general initiate calls on my
    behalf but still have some calls via that site where I can be sure
    that the site is not listening in.
-
+对于用户可以使用相同服务与许多不同的人交谈的任何类型的服务，存在关于用户是否可以知道他们正在与谁交谈的问题。如果我授权呼叫服务A代表我拨打电话，那么我是隐含的授予它权限。这表明另一个同意模型，其中一个站点被授权拨打电话，但仅限于某些目标实体（通过4.3.2节，特别是第4.3.2.3节中描述的媒体的平面加密机制识别）请注意这里的同意问题与同伴身份的问题有关但不同：我可能愿意允许呼叫站点代表我发起呼叫，但仍然通过该站点进行一些呼叫，我可以确定该站点没有监听。
 4.1.2.2.  Calling the Site You're On
-
+调用你正在访问的站点
    Another simple scenario is calling the site you're actually visiting.
    The paradigmatic case here is the "click here to talk to a
    representative" windows that appear on many shopping sites.  In this
@@ -481,25 +480,20 @@ Internet-Draft               WebRTC Security                January 2018
    interface chrome must clearly display elements showing that the call
    is continuing in order to avoid attacks where the calling site just
    leaves it up indefinitely but shows a Web UI that implies otherwise.
-
+另一个简单的场景是调用您实际访问的站点。这里的范例是“点击这里与代表交谈”窗口，这些窗口出现在许多购物网站上。在这种情况下，用户期望他们正在呼叫他们实际访问的网站。但是，他们不太可能希望对此类网站提供所有同意；仅仅因为我想要一些关于汽车的信息并不意味着我希望汽车制造商能够随时激活我的麦克风。因此，这表明需要第二个同意机制，我只在给定呼叫的持续时间给予同意。如3.1节所述，在设计此接口时必须非常小心以避免用户点击。另外用户界面chrome必须清楚地表明呼叫正在进行，以避免在调用站点无限期地离开但是显示webUI的情况下发生攻击。
 4.1.3.  Origin-Based Security
-
+基于源的安全性
    Now that we have seen another use case, we can start to reason about
    the security requirements.
-
    As discussed in Section 3.2, the basic unit of Web sandboxing is the
    origin, and so it is natural to scope consent to origin.
    Specifically, a script from origin A MUST only be allowed to initiate
    communications (and hence to access camera and microphone) if the
-
-Rescorla                  Expires July 26, 2018                 [Page 9]
-Internet-Draft               WebRTC Security                January 2018
-
    user has specifically authorized access for that origin.  It is of
    course technically possible to have coarser-scoped permissions, but
    because the Web model is scoped to origin, this creates a difficult
    mismatch.
-
+现在我们已经看到了另一个用力，我们可以推理安全性要求。如第3.2节所述，web沙盒的基本单元是起源，因此将同意范围设置为初始值很自然。具体来说，如果用户已明确授权访问该来源，只有来自原点A的脚本才能被允许发起通信（因此访问摄像头和麦克风）。在技术上可能有较粗略的范围的权限，但因为WEB模型的作用范围是原产地，这创造了一个棘手的不匹配问题。
    Arguably, origin is not fine-grained enough.  Consider the situation
    where Alice visits a site and authorizes it to make a single call.
    If consent is expressed solely in terms of origin, then at any future
@@ -509,19 +503,24 @@ Internet-Draft               WebRTC Security                January 2018
    privilege, in practice privileges accumulate; if we are concerned
    about this attack, something else is needed.  There are a number of
    potential countermeasures to this sort of issue.
-
-   Individual Consent
-
+可以说，起源不够精细。考虑Alice访问网站并授权其进行单个呼叫的情况。
+如果同意仅以原产地表示，则在将来访问该网站（包括通过混搭或广告网络引发的一方），该网站可能会破坏Alice的计算机，使用计算机进行虚假呼叫等。原则上Alice可以授予然后撤销该权限，在实践中权限会累积; 如果我们担心这次袭击，还需要其他东西。这类问题有很多潜在的对策。
+   1）Individual Consent
+个人同意
       Ask the user for permission for each call.
+询问用户是否允许每次通话。
 
-   Callee-oriented Consent
+   2）Callee-oriented Consent
+面向被叫方的同意
 
       Only allow calls to a given user.
-
-   Cryptographic Consent
-
+仅允许对给定用户的呼叫。
+   3）Cryptographic Consent
+加密同意
       Only allow calls to a given set of peer keying material or to a
       cryptographically established identity.
+仅允许调用给定的一组对等密钥材料或
+加密建立的标识。
 
    Unfortunately, none of these approaches is satisfactory for all
    cases.  As discussed above, individual consent puts the user's
@@ -532,6 +531,7 @@ Internet-Draft               WebRTC Security                January 2018
    suitable solution for (for instance) the calling service case.  Where
    necessary, in-flow user interfaces must be carefully designed to
    avoid the risk of the user blindly clicking through.
+不幸的是，这些方法都不是令人满意。如上所述，个人同意将用户的批准置于每个呼叫的UI流程中。这不仅会很快变得烦人，而且可以训练用户只需单击“确定”，此时同意就变得无用了。因此，虽然在某些情况下可能需要个人同意，但这不是（例如）呼叫服务案例的合适解决方案。当必要时，流的用户界面必须精心设计，以避免用户盲目点击通过的风险。
 
    The other two options are designed to restrict calls to a given
    target.  Callee-oriented consent provided by the calling site not
@@ -539,11 +539,7 @@ Internet-Draft               WebRTC Security                January 2018
    any user of his choice.  One fix for this is to tie calls to a
    cryptographically established identity.  While not suitable for all
    cases, this approach may be useful for some.  If we consider the case
-
-Rescorla                  Expires July 26, 2018                [Page 10]
-Internet-Draft               WebRTC Security                January 2018
-
-   of advertising, it's not particularly convenient to require the
+of advertising, it's not particularly convenient to require the
    advertiser to instantiate an iframe on the hosting site just to get
    permission; a more convenient approach is to cryptographically tie
    the advertiser's certificate to the communication directly.  We're
@@ -551,6 +547,10 @@ Internet-Draft               WebRTC Security                January 2018
    or destination) rather than to the Web origin.
    [I-D.ietf-rtcweb-security-arch] describes mechanisms which facilitate
    this sort of consent.
+其他两个选项旨在限制对给定目标的调用。呼叫站点提供的面向被呼叫者的同意不是工作得很好，因为恶意网站可以声称用户正在呼叫他选择的任何用户。解决此问题的一个方法是将呼叫与加密建立的身份联系起来。虽然不适合所有
+ 情况，但这种方法对某些人可能有用。如果我们考虑的情况下的广告，这不是特别方便，要求广告实例对托管网站的iframe只是为了得到许可; 更方便的方法是
+将广告商的证书加密地绑定到通信。我们仍然将权限绑定到此处，但是对于媒体
+而不是Web源。[ID.ietf-rtcweb-security-arch]描述了促进此类同意的机制。
 
    Another case where media-level cryptographic identity makes sense is
    when a user really does not trust the calling site.  For instance, I
@@ -560,9 +560,10 @@ Internet-Draft               WebRTC Security                January 2018
    risk is limited.  Naturally, it is somewhat challenging to design UI
    primitives which express this sort of policy.  The problem becomes
    even more challenging in multi-user calling cases.
-
+媒体级加密身份有意义的另一种情况是用户确实不信任呼叫站点。例如，我可能担心呼叫服务会试图破坏我的电脑，但我也希望能够方便地给我的朋友打电话。
+如果同意与特定通信端点相关联，那么我的风险是有限的。当然，设计UI有些挑战表达这种政策的原始人。在多用户呼叫案例中，问题变得更具挑战性。
 4.1.4.  Security Properties of the Calling Page
-
+呼叫页面的安全属性
    Origin-based security is intended to secure against web attackers.
    However, we must also consider the case of network attackers.
    Consider the case where I have granted permission to a calling
@@ -571,7 +572,6 @@ Internet-Draft               WebRTC Security                January 2018
    network (e.g., a hotspot or if my own home wireless network is
    insecure), and browse any HTTP site, then an attacker can bug my
    computer.  The attack proceeds like this:
-
    1.  I connect to http://anything.example.org/. Note that this site is
        unaffiliated with the calling service.
 
@@ -580,6 +580,15 @@ Internet-Draft               WebRTC Security                January 2018
 
    3.  The attacker forges the response apparently http://calling-
        service.example.com/ to inject JS to initiate a call to himself.
+基于原始的安全性旨在保护网络攻击者免受攻击。但是，我们还必须考虑网络攻击者的情况。考虑我已经通过具有HTTP方案的来源授予对呼叫服务的许可的情况，例如http：// calling- service.example.com。如果我在不安全的网络上使用我的计算机（例如，热点或我自己的家庭无线网络不安全），并浏览任何HTTP站点，则攻击者可能会弄错我的计算机。攻击如下进行：
+   1.我连接到http://anything.example.org/。请注意，此站点
+       与呼叫服务无关。
+
+   2.攻击者修改我的HTTP连接以将IFRAME（或
+       重定向）注入http://calling-service.example.com 
+
+   3.攻击者显然伪造了响应http：// calling- 
+       service.example.com/ to注入JS以启动对自己的呼叫。
 
    Note that this attack does not depend on the media being insecure.
    Because the call is to the attacker, it is also encrypted to him.
@@ -589,10 +598,7 @@ Internet-Draft               WebRTC Security                January 2018
    able to bug me long after I have left the infected network.  This
    risk is created by allowing calls at all from a page fetched over
    HTTP.
-
-Rescorla                  Expires July 26, 2018                [Page 11]
-Internet-Draft               WebRTC Security                January 2018
-
+请注意，此攻击不依赖于媒体不安全。因为呼叫是针对攻击者的，所以它也被加密。而且，不需要立即执行; 攻击者可以半永久地“感染”原点（例如，与网络工作者或者弹出的窗口隐藏在主窗口下面。）因此能够在我离开受感染的网络后很长时间内让我感到烦恼。通过允许从通过HTTP 获取的页面进行调用来创建此风险。
    Even if calls are only possible from HTTPS [RFC2818] sites, if the
    site embeds active content (e.g., JavaScript) that is fetched over
    HTTP or from an untrusted site, because that JavaScript is executed
@@ -602,15 +608,17 @@ Internet-Draft               WebRTC Security                January 2018
    which contain mixed content.  If a page from a given origin ever
    loads mixed content then it is possible for a network attacker to
    infect the browser's notion of that origin semi-permanently.
+即使只能通过HTTPS [RFC2818]站点进行呼叫，如果站点嵌入通过HTTP或不受信任的方式获取的活动内容（例如，JavaScript）site，因为JavaScript是在页面的安全上下文中执行的[更细粒度]。因此，允许来自HTTPS源的WebRTC功能也是危险的嵌入混合内容。注意：此问题不仅限于包含混合内容的PAGES 。如果来自给定来源的页面加载了混合内容，则网络攻击者可能会半永久地感染浏览器对该来源的概念。
+
+
 
 4.2.  Communications Consent Verification
-
+   4.2. 共识通信的验证 
    As discussed in Section 3.3, allowing web applications unrestricted
    network access via the browser introduces the risk of using the
    browser as an attack platform against machines which would not
    otherwise be accessible to the malicious site, for instance because
    they are topologically restricted (e.g., behind a firewall or NAT).
-   4.2. 共识通信的验证 
    如第3.3节所述，允许Web应用程序通过浏览器进行不受限制的网络访问会带来计算机被当做攻击平台的风险，而这些计算机对于恶意站点来说可能是不允许访问的，比如，可能因为拓扑限制（例如，有防火墙或NAT后面）。
    In order to prevent this form of attack as well as cross-protocol
    attacks it is important to require that the target of traffic
@@ -648,9 +656,10 @@ Internet-Draft               WebRTC Security                January 2018
    responses).  In order to achieve this objective with ICE, the STUN
    transaction IDs must be generated by the browser and MUST NOT be made
    available to the initiating script, even via a diagnostic interface.
-4.2.1。ICE 
+4.2.1. ICE
+4.2.1. 交互式连接建立 
    验证接收方同意需要某种明确的握手，但方便的是我们已经需要一个以进行NAT转换。
-   ICE [RFC5245]介绍了一种握手方法，旨在验证接收元素是否希望从发送方接收流量。它重要的是要记住启动ICE的网站是否是被认为是恶意的; 为了使握手安全，接收元素必须证明对站点不可用的某些值的接收/知识（从而防止站点伪造响应）。为了通过ICE实现这一目标，STUN事务ID必须由浏览器生成，并且不得通过诊断接口提供启动脚本。
+   ICE [RFC5245]介绍了一种握手方法，旨在验证接收元素是否希望从发送方接收流量。重要的是要记住启动ICE的网站是否是假设为恶意的; 为了使握手安全，接收元素必须证明对站点不可用的某些值的接收/知识（从而防止站点伪造响应）。为了通过ICE实现这一目标，STUN事务ID必须由浏览器生成，并且禁止通过诊断接口提供启动脚本。
 
    Verifying receiver consent also requires verifying the receiver wants
    to receive traffic from a particular sender, and at this time; for
@@ -660,25 +669,25 @@ Internet-Draft               WebRTC Security                January 2018
    secret.  Those credentials are known to the Web application, but
    would need to also be known and used by the STUN-receiving element to
    be useful.
-
+   验证接收者同意还需要验证接收者是否需要接收来自特定发送者的流量，此时; 例如恶意网站可能只是试图建立ICE到已知的服务器上，使用ICE的其他部分。ICE也通过使用STUN凭证作为每次会话共享密钥的形式提供此验证。这些凭证对于Web应用程序是已知的，但是STUN接收元素也需要知道并使用它们才有奏效。
    There also needs to be some mechanism for the browser to verify that
    the target of the traffic continues to wish to receive it.  Because
    ICE keepalives are indications, they will not work here.  [RFC7675]
    describes the mechanism for providing consent freshness.
-
+   还需要一些机制让浏览器验证流量的目标是否继续希望接收它。因为ICE的保活是需要指明的，保活并不能够在这里工作。[RFC7675]描述了提供保活同意的机制。
 4.2.2.  Masking
-
+4.2.2.  掩码
    Once consent is verified, there still is some concern about
    misinterpretation attacks as described by Huang et al.[huang-w2sp].
    Where TCP is used the risk is substantial due to the potential
    presence of transparent proxies and therefore if TCP is to be used,
    then WebSockets style masking MUST be employed.
-
+   尽管共识同意被核实了，但是仍然存在一些关于误解攻击的担忧，正如Huang等在[huang-w2sp]所述。在使用TCP的情况下，由于可能存在透明代理，风险很大，因此如果要使用TCP，则必须采用WebSockets样式的掩码。
    Since DTLS (with the anti-chosen plaintext mechanisms required by TLS
    1.1) does not allow the attacker to generate predictable ciphertext,
    there is no need for masking of protocols running over DTLS (e.g.
    SCTP over DTLS, UDP over DTLS, etc.).
-
+   由于DTLS（具有反选择明文机制的TLS1.1）不允许攻击者生成可预测的密文，因此不需要屏蔽在DTLS上运行的协议（例如，基于DTLS的SCTP，基于DTLS的UDP等）。
    Note that in principle an attacker could exert some control over SRTP
    packets by using a combination of the WebAudio API and extremely
    tight timing control.  The primary risk here seems to be carriage of
@@ -686,29 +695,31 @@ Internet-Draft               WebRTC Security                January 2018
    characteristic packet header it seems unlikely that any but the most
    aggressive intermediaries would be confused into thinking that
    another application layer protocol was in use.
-
+   注意，攻击者原则上可以对SRTP施加一些控制通过结合使用WebAudio API和非常严格的时序控制来实现封装数据包。这里主要的风险似乎是通过利用TCP来传输SRTP。但是，由于SRTP数据包具有极其特殊的数据包标头，因此除了最具侵略性的中介之外，任何人都不会将这种数据包和正在使用的另一个应用程序层协议混淆。
 4.2.3.  Backward Compatibility
-
+   4.2.3 向后兼容性
    A requirement to use ICE limits compatibility with legacy non-ICE
    clients.  It seems unsafe to completely remove the requirement for
    some check.  All proposed checks have the common feature that the
    browser sends some message to the candidate traffic recipient and
    refuses to send other traffic until that message has been replied to.
+   使用ICE的要求限制了与传统非ICE客户端的兼容性。完全取消某些检查的要求似乎是不安全的。所有被提出的检查都有一个共同特征，即浏览器向候选流量接收者发送一些消息并且拒绝发送其他流量直到该消息被回复。
    The message/reply pair must be generated in such a way that an
    attacker who controls the Web application cannot forge them,
    generally by having the message contain some secret value that must
    be incorporated (e.g., echoed, hashed into, etc.).  Non-ICE
    candidates for this role (in cases where the legacy endpoint has a
    public address) include:
-
-Rescorla                  Expires July 26, 2018                [Page 13]
-Internet-Draft               WebRTC Security                January 2018
+   必须以这样的方式生成消息/回复对：
+   通常是通过使消息包含一些必须生成的某些秘钥值（例如，回显，散列等）使得控制Web应用程序的攻击者不能伪造它们。
+   此角色可以为非ICE候选者（在遗留端点具有公共地址的情况下）包括：
 
    o  STUN checks without using ICE (i.e., the non-RTC-web endpoint sets
       up a STUN responder.)
 
    o  Use or RTCP as an implicit reachability check.
-
+   1. STUN不使用ICE进行检查（即非RTC-web端点设置STUN响应器。）
+   2. 使用RTCP作为隐式可达性检查。
    In the RTCP approach, the WebRTC endpoint is allowed to send a
    limited number of RTP packets prior to receiving consent.  This
    allows a short window of attack.  In addition, some legacy endpoints
@@ -716,7 +727,8 @@ Internet-Draft               WebRTC Security                January 2018
    such endpoints, for which it would likely be easier to implement ICE.
    For these two reasons, an RTCP-based approach does not seem to
    address the security issue satisfactorily.
-
+   在RTCP方法中，允许WebRTC端点在接收同意之前发送有限数量的RTP数据包。这允许短暂的攻击窗口。此外，一些传统端点不支持RTCP，因此对于此类端点而言，这是一种更昂贵的解决方案，这样的话可能更容易实现ICE。出于这两个原因，基于RTCP的方法似乎并未
+   令人满意地解决安全问题。
    In the STUN approach, the WebRTC endpoint is able to verify that the
    recipient is running some kind of STUN endpoint but unless the STUN
    responder is integrated with the ICE username/password establishment
@@ -725,7 +737,9 @@ Internet-Draft               WebRTC Security                January 2018
    servers are operated at addresses that are not able to handle
    bandwidth-based attacks.  Thus, this approach does not seem
    satisfactory either.
-
+   在STUN方法中，WebRTC端点能够验证接收方是否正在运行某种STUN端点，但除非STUN
+   响应者与ICE用户名/密码建立系统集成在一起，WebRTC端点无法验证接收方是否同意
+   这个特定呼叫。如果现有STUN服务器在无法处理基于带宽的攻击的地址上运行，那么这可能是一个问题。因此，这种方法似乎也不能够令人满意。
    If the systems are tightly integrated (i.e., the STUN endpoint
    responds with responses authenticated with ICE credentials) then this
    issue does not exist.  However, such a design is very close to an
