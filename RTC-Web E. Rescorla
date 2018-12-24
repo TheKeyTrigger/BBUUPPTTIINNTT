@@ -598,7 +598,7 @@ of advertising, it's not particularly convenient to require the
    able to bug me long after I have left the infected network.  This
    risk is created by allowing calls at all from a page fetched over
    HTTP.
-请注意，此攻击不依赖于媒体不安全。因为呼叫是针对攻击者的，所以它也被加密。而且，不需要立即执行; 攻击者可以半永久地“感染”原点（例如，与网络工作者或者弹出的窗口隐藏在主窗口下面。）因此能够在我离开受感染的网络后很长时间内让我感到烦恼。通过允许从通过HTTP 获取的页面进行调用来创建此风险。
+   请注意，此攻击不依赖于媒体不安全。因为呼叫是针对攻击者的，所以它也被加密。而且，不需要立即执行; 攻击者可以半永久地“感染”原点（例如，与网络工作者或者弹出的窗口隐藏在主窗口下面。）因此能够在我离开受感染的网络后很长时间内让我感到烦恼。通过允许从通过HTTP 获取的页面进行调用来创建此风险。
    Even if calls are only possible from HTTPS [RFC2818] sites, if the
    site embeds active content (e.g., JavaScript) that is fetched over
    HTTP or from an untrusted site, because that JavaScript is executed
@@ -608,7 +608,7 @@ of advertising, it's not particularly convenient to require the
    which contain mixed content.  If a page from a given origin ever
    loads mixed content then it is possible for a network attacker to
    infect the browser's notion of that origin semi-permanently.
-即使只能通过HTTPS [RFC2818]站点进行呼叫，如果站点嵌入通过HTTP或不受信任的方式获取的活动内容（例如，JavaScript）site，因为JavaScript是在页面的安全上下文中执行的[更细粒度]。因此，允许来自HTTPS源的WebRTC功能也是危险的嵌入混合内容。注意：此问题不仅限于包含混合内容的PAGES 。如果来自给定来源的页面加载了混合内容，则网络攻击者可能会半永久地感染浏览器对该来源的概念。
+   即使只能通过HTTPS [RFC2818]站点进行呼叫，如果站点嵌入通过HTTP或不受信任的方式获取的活动内容（例如，JavaScript）site，因为JavaScript是在页面的安全上下文中执行的[更细粒度]。因此，允许来自HTTPS源的WebRTC功能也是危险的嵌入混合内容。注意：此问题不仅限于包含混合内容的PAGES 。如果来自给定来源的页面加载了混合内容，则网络攻击者可能会半永久地感染浏览器对该来源的概念。
 
 
 
