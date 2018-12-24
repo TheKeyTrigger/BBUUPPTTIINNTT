@@ -1,3 +1,10 @@
+封面
+名称：Security Considerations for WebRTC
+      draft-ietf-rtcweb-security-10
+姓名：马圳江、朱如靖
+学号：马圳江：2018111631、朱如靖：2018111557
+邮箱：马圳江：mzj36900@bupt.edu.cn、朱如靖：zrj@bupt.edu.cn
+
 RTC-Web E. Rescorla
 Internet-Draft RTFM, Inc.
 Intended status: Standards Track                        January 22, 2018
@@ -727,8 +734,7 @@ of advertising, it's not particularly convenient to require the
    such endpoints, for which it would likely be easier to implement ICE.
    For these two reasons, an RTCP-based approach does not seem to
    address the security issue satisfactorily.
-   在RTCP方法中，允许WebRTC端点在接收同意之前发送有限数量的RTP数据包。这允许短暂的攻击窗口。此外，一些传统端点不支持RTCP，因此对于此类端点而言，这是一种更昂贵的解决方案，这样的话可能更容易实现ICE。出于这两个原因，基于RTCP的方法似乎并未
-   令人满意地解决安全问题。
+   在RTCP方法中，允许WebRTC端点在接收同意之前发送有限数量的RTP数据包。这允许短暂的攻击窗口。此外，一些传统端点不支持RTCP，因此对于此类端点而言，这是一种更昂贵的解决方案，这样的话可能更容易实现ICE。出于这两个原因，基于RTCP的方法似乎并未令人满意地解决安全问题。
    In the STUN approach, the WebRTC endpoint is able to verify that the
    recipient is running some kind of STUN endpoint but unless the STUN
    responder is integrated with the ICE username/password establishment
@@ -738,8 +744,9 @@ of advertising, it's not particularly convenient to require the
    bandwidth-based attacks.  Thus, this approach does not seem
    satisfactory either.
    在STUN方法中，WebRTC端点能够验证接收方是否正在运行某种STUN端点，但除非STUN
-   响应者与ICE用户名/密码建立系统集成在一起，WebRTC端点无法验证接收方是否同意
-   这个特定呼叫。如果现有STUN服务器在无法处理基于带宽的攻击的地址上运行，那么这可能是一个问题。因此，这种方法似乎也不能够令人满意。
+   响应者与ICE用户名/密码建立系统集成在一起，WebRTC端点无法验证接收方是否同
+   意这个特定呼叫。如果现有STUN服务器在无法处理基于带宽的攻击的地址上运行
+   ，那么这可能是一个问题。因此，这种方法似乎也不能够令人满意。
    If the systems are tightly integrated (i.e., the STUN endpoint
    responds with responses authenticated with ICE credentials) then this
    issue does not exist.  However, such a design is very close to an
@@ -750,7 +757,7 @@ of advertising, it's not particularly convenient to require the
    STUN servers without the risk of confusing them with legacy STUN
    servers.  If a non-ICE legacy solution is needed, then this is
    probably the best choice.
-
+   如果系统是紧密集成的（即STUN端点响应使用ICE凭证进行身份验证的响应），则此问题不存在。然而，这样的设计非常接近ICE-Lite实现（实际上可以说就是）。一种中间方法是使用STUN扩展，表明一个人正在响应WebRTC检验，但没有根据ICE凭证计算完整性检验。 这将允许使用独立的STUN服务器，而不会有将它们与传统STUN服务器混淆的风险。如果需要非ICE传统解决方案，这可能是最佳选择。
    Once initial consent is verified, we also need to verify continuing
    consent, in order to avoid attacks where two people briefly share an
    IP (e.g., behind a NAT in an Internet cafe) and the attacker arranges
@@ -758,7 +765,7 @@ of advertising, it's not particularly convenient to require the
    leaves.  The appropriate technologies here are fairly similar to
    those for initial consent, though are perhaps weaker since the
    threats is less severe.
-
+   一旦初步同意得到验证，我们还需要验证继续同意，以避免两个人短暂共享IP的攻击（例如，在网吧中的NAT）和攻击者使大量的不可阻挡的流量进入网络。这里的适用技术与初始同意的技术非常相似，但由于威胁不那么严重，因此技术可能较弱。
 4.2.4.  IP Location Privacy
 
    Note that as soon as the callee sends their ICE candidates, the
@@ -766,13 +773,13 @@ of advertising, it's not particularly convenient to require the
    reflexive address reveals a lot of information about the callee's
    location.  In order to avoid tracking, implementations may wish to
    suppress the start of ICE negotiation until the callee has answered.
-
-Rescorla                  Expires July 26, 2018                [Page 14]
-Internet-Draft               WebRTC Security                January 2018
+4.2.4.IP 位置隐私 
+	
+	请注意，一旦被叫者发送其ICE候选者，调用者就会获知被叫方的IP地址。被叫者的服务器自反地址显示了有关被叫者位置的大量信息。为了避免跟踪，希望实现抑制ICE协商的起始，直到被叫者应答。
 
    In addition, either side may wish to hide their location entirely by
    forcing all traffic through a TURN server.
-
+   此外，任何一方可能希望通过强制所有流量通过一个TURN服务器完全隐藏自己的位置。
    In ordinary operation, the site learns the browser's IP address,
    though it may be hidden via mechanisms like Tor
    [http://www.torproject.org] or a VPN.  However, because sites can
@@ -782,7 +789,7 @@ Internet-Draft               WebRTC Security                January 2018
    may wish to provide settings which suppress all non-VPN candidates if
    the user is on certain kinds of VPN, especially privacy-oriented
    systems such as Tor.
-
+   在普通操作中，网站会学习浏览器的IP地址，但可能会通过Tor [http://www.torproject.org]或VPN等机制隐藏。但是，由于站点可以使浏览器提供IP地址，因此即使用户位于掩盖其IP地址的VPN之后，也可以为站点提供了解用户网络环境的机制。如果用户使用特定类型的VPN，特别是面向隐私的系统（如Tor），实现可能希望提供抑制所有非VPN候选者的设置。
 4.3.  Communications Security
 
    Finally, we consider a problem familiar from the SIP world:
@@ -796,7 +803,9 @@ Internet-Draft               WebRTC Security                January 2018
    [RFC5763]) is well understood.  However, we must examine this
    technology to the WebRTC context, where the threat model is somewhat
    different.
+4.3. 通信安全 
 
+	最后，我们考虑SIP世界熟悉的问题：通信安全。出于显而易见的原因，通信方必须能够建立一个对消息恢复和消息修改都是安全的信道。（详细有关信息，请参阅[RFC5479]。）这项服务必须为数据和语音/视频提供。理想情况下，两种类型的内容都将使用相同的安全机制。 提供此服务的技术（例如，SRTP [RFC3711],DTLS [RFC6347]和DTLS-SRTP [RFC5763]）已被充分理解。但是，我们必须在WebRTC上下文中检查此技术，其中威胁模型有些不同。
    In general, it is important to understand that unlike a conventional
    SIP proxy, the calling service (i.e., the Web server) controls not
    only the channel between the communicating endpoints but also the
@@ -812,15 +821,12 @@ Internet-Draft               WebRTC Security                January 2018
    rendered by the browser but under control of the calling service.
    This likely includes the peer's identity information, which, after
    all, is only meaningful in the context of some calling service.
-
+   虽然原则上浏览器可以将调用服务从循环中删除并直接呈现可信信息（并且可能获得同意），但现代浏览器中的实践是尽可能避免这种情况。需要用户同意特定行动的“流动”模式对话特别不受欢迎，因为人为因素研究表明，除非它们具有极强的侵入性，否则用户只需同意他们实际上无意识同意的对话。[abarth-rtcweb]。因此，几乎所有的UI都必须由浏览器呈现，但是是在调用服务的控制下。这可能包括对等方的身份信息，毕竟这些信息仅在某些调用服务的上下文中有意义。
    This limitation does not mean that preventing attack by the calling
    service is completely hopeless.  However, we need to distinguish
    between two classes of attack:
 
    Retrospective compromise of calling service.
-
-Rescorla                  Expires July 26, 2018                [Page 15]
-Internet-Draft               WebRTC Security                January 2018
 
       The calling service is is non-malicious during a call but
       subsequently is compromised and wishes to attack an older call
@@ -830,7 +836,7 @@ Internet-Draft               WebRTC Security                January 2018
 
       The calling service is compromised during the call it wishes to
       attack (often called an "active attack").
-
+   这种限制并不意味着防止调用服务的攻击完全没有希望。 但是，我们需要区分两类攻击：1.调用服务的回顾性妥协,调用服务在调用期间是非恶意的，但随后受到了攻击并意图攻击较旧的调用（通常称为“被动攻击”）2.通过调用服务进行调用中的攻击,调用服务在其希望攻击的调用期间受到了攻击（通常称为“主动攻击”）。
    Providing security against the former type of attack is practical
    using the techniques discussed in Section 4.3.1.  However, it is
    extremely difficult to prevent a trusted but malicious calling
@@ -840,7 +846,7 @@ Internet-Draft               WebRTC Security                January 2018
    calling service are not secured.)  We discuss some potential
    approaches and why they are likely to be impractical in
    Section 4.3.2.
-
+   使用第4.3.1节中讨论的技术可以提供针对前一类攻击的安全性。 但是，通过安装MITM攻击或完全转移它们来防止可信但恶意的 调用服务主动攻击用户的 调用是极其困难的。 （请注意，如果与调用服务的通信不安全，则此攻击同样适用于网络攻击者。）我们将讨论一些可能的方法以及为什么它们在第4.3.2节中可能不切实际。
 4.3.1.  Protecting Against Retrospective Compromise
 
    In a retrospective attack, the calling service was uncompromised
@@ -848,7 +854,10 @@ Internet-Draft               WebRTC Security                January 2018
    the content of the call.  We assume that the attacker has access to
    the protected media stream as well as having full control of the
    calling service.
-
+4.3.1.  防止追溯性妥协
+	
+   在回溯性攻击中，调用服务在调用期间是不妥协的，但攻击者随后想要恢复调用的内容。 我们假设攻击者可以访问受保护的媒体流，并且可以完全控制调用服务。
+　　
    If the calling service has access to the traffic keying material (as
    in SDES [RFC4568]), then retrospective attack is trivial.  This form
    of attack is particularly serious in the Web context because it is
@@ -861,14 +870,14 @@ Internet-Draft               WebRTC Security                January 2018
    and this mechanism SHOULD provide perfect forward secrecy (PFS).  The
    signaling channel/calling service can be used to authenticate this
    mechanism.
-
+   如果调用服务可以访问流量密钥材料（如SDES [RFC4568]），则回溯攻击是微不足道的。 这种形式的攻击在Web上下文中尤其严重，因为Web服务中的标准做法是运行广泛的日志记录和监视。因此，如果流量密钥很有可能是任何HTTP请求的一部分，则它将被记录在某处，从而受到后续的损害。正是这种考虑使得基于公钥的自动密钥交换机制对WebRTC来说势在必行（这对任何通信安全系统来说都是一个好主意），这种机制应该提供完美的前向保密（PFS）。信令通道/调用服务可用于验证该机制。
    In addition, if end-to-end keying is in used, the system MUST NOT
    provide any APIs to extract either long-term keying material or to
    directly access any stored traffic keys.  Otherwise, an attacker who
    subsequently compromised the calling service might be able to use
    those APIs to recover the traffic keys and thus compromise the
    traffic.
-
+   此外，如果使用端到端密钥，系统绝不能提供任何API来提取长期密钥材料或直接访问任何存储的流量密钥。否则，随后攻击服务的攻击者可能能够使用这些API来恢复流量密钥，从而危及流量。
 Rescorla                  Expires July 26, 2018                [Page 16]
 Internet-Draft               WebRTC Security                January 2018
 
@@ -885,7 +894,9 @@ Internet-Draft               WebRTC Security                January 2018
    explicit out-of-band key verification (e.g., by a fingerprint) or a
    third-party identity service as described in
    [I-D.ietf-rtcweb-security-arch].
-
+4.3.2． 防止调用期间的攻击
+	
+   在调用期间防止攻击是一个更难的主张。即使调用服务无法直接访问密钥资料（如上一节所述），它也可以简单地在连接上发起中间人攻击，告诉Alice她正在调用Bob和Bob他正在调用Alice，但实际上，调用服务充当调用桥并捕获所有流量。防止这种形式的攻击需要对远程端点进行正面认证，例如明确的带外密钥验证（例如，通过指纹）或第三方身份服务如[ID.ietf-rtcweb-security-arch]中所述。
 4.3.2.1.  Key Continuity
 
    One natural approach is to use "key continuity".  While a malicious
@@ -896,7 +907,8 @@ Internet-Draft               WebRTC Security                January 2018
    uses a similar technique.  (Note that the need to avoid explicit user
    consent on every call precludes the browser requiring an immediate
    manual check of the peer's key).
-
+4.3.2.1  密钥连续性 
+	一种自然的方法是使用“密钥连续性”。虽然恶意调用服务可以向用户显示它选择的任何身份，但它不能生成映射到给定公钥的私钥。因此，浏览器可以记录给定用户的公钥，并在该用户的密钥改变时生成警报。SSH [RFC4251]使用类似的技术。（请注意，在每次调用时都需要避免明确的用户同意，这就要求浏览器需要立即手动检查对方的密钥）。
    Unfortunately, this sort of key continuity mechanism is far less
    useful in the WebRTC context.  First, much of the virtue of WebRTC
    (and any Web application) is that it is not bound to particular piece
@@ -909,7 +921,7 @@ Internet-Draft               WebRTC Security                January 2018
    that users routinely will click through far more dire warnings
    [cranor-wolf], it seems extremely unlikely that any key continuity
    mechanism will be effective rather than simply annoying.
-
+   不幸的是，这种关键的连续性机制在WebRTC上下文中没那么有用。首先，WebRTC（以及任何Web应用程序）的许多优点是它不受特定客户端软件的约束。 因此，用户在不同的计算机上使用多个浏览器不仅是可能的而且是常规的，当然这些浏览器具有不同的密钥材料（SACRED [RFC3760]notwithstanding）。因此，用户将经常被提示实际上是合法的密钥不匹配，结果是他们被训练简单的点击它们。众所周知，用户通常会点击更严重的警告[cranor-wolf]，看起来似乎任何密钥连续性机制都不太可能是有效而仅仅是惹人心烦的。
    Moreover, it is trivial to bypass even this kind of mechanism.
    Recall that unlike the case of SSH, the browser never directly gets
    the peer's identity from the user.  Rather, it is provided by the
@@ -919,13 +931,9 @@ Internet-Draft               WebRTC Security                January 2018
    triggering a key continuity warning is to tell the browser that "this
    is a call to user Y" where Y is close to X.  Even if the user
    actually checks the other side's name (which all available evidence
-   indicates is unlikely), this would require (a) the browser to trusted
-
-Rescorla                  Expires July 26, 2018                [Page 17]
-Internet-Draft               WebRTC Security                January 2018
-
-   UI to provide the name and (b) the user to not be fooled by similar
+   indicates is unlikely), this would require (a) the browser to trusted UI to provide the name and (b) the user to not be fooled by similar
    appearing names.
+   而且，甚至绕过这种机制也是微不足道的。回想一下，与SSH的情况不同，浏览器永远不会直接从用户获取对等方的身份。相反，它由调用服务提供。即使启用这种类型的机制也需要API来允许调用服务告诉浏览器“这是对用户X的调用”。所有调用服务为避免触发密钥连续性警告，需要告诉浏览器“这是对用户Y的调用”，其中Y与X相似。即使用户实际检查对方的名称（全部可用证据表明不太可能），这将要求（a）浏览器向受信任的UI提供名称，以及（b）用户不要被类似的出现名称所欺骗。
 
 4.3.2.2.  Short Authentication Strings
 
@@ -936,7 +944,9 @@ Internet-Draft               WebRTC Security                January 2018
    sides precludes MITM attack.  The intention is that the SAS is used
    once and then key continuity (though a different mechanism from that
    discussed above) is used thereafter.
+4.3.2.2  短认证字符串 
 
+   ZRTP [RFC6189]使用从密钥协商协议派生的“短认证字符串”（SAS）。 该SAS被设计为由用户进行比较（例如，通过语音信道朗读或通过带外信道发送），并且双方确认是否排除MITM攻击。目的是使用SAS一次，然后使用密钥连续性（尽管与上面讨论的机制不同）。
    Unfortunately, the SAS does not offer a practical solution to the
    problem of a compromised calling service.  "Voice conversion"
    systems, which modify voice from one speaker to make it sound like
@@ -947,7 +957,7 @@ Internet-Draft               WebRTC Security                January 2018
    environment where the user just wants to get on with the phone call.
    Thus, even if SAS is effective today, it is likely not to be so for
    much longer.
-
+   不幸的是，SAS没有为受攻击的调用服务问题提供实用的解决方案。“语音转换”系统是一个活跃的研究领域，它可以修改一个扬声器的声音，使其听起来像另一个扬声器。 在很多情况下，这些系统已经足够愚弄自动识别系统[farus-conversion]和人类[kain-conversion]，并且当然可能在将来有所改进，特别是在用户只想打电话的环境中。因此，即使SAS今天有效，不久后也可能不会有效。
    Additionally, it is unclear that users will actually use an SAS.  As
    discussed above, the browser UI constraints preclude requiring the
    SAS exchange prior to completing the call and so it must be
@@ -955,7 +965,7 @@ Internet-Draft               WebRTC Security                January 2018
    the SAS has not yet been checked.  However, it it is well-known that
    when faced with optional security mechanisms, many users simply
    ignore them [whitten-johnny].
-
+   此外，尚不清楚用户是否会实际使用SAS。如上所述，浏览器UI约束排除了在完成呼叫之前需要SAS交换，因此它必须是自愿的；最多浏览器可提供一些尚未检查SAS的UI指示符。然而，众所周知，当面对可选的安全机制时，许多用户只是忽略它们[whitten-johnny]。
    Once users have checked the SAS once, key continuity is required to
    avoid them needing to check it on every call.  However, this is
    problematic for reasons indicated in Section 4.3.2.1.  In principle
@@ -966,7 +976,7 @@ Internet-Draft               WebRTC Security                January 2018
    someone you haven't called before) but as a practical matter, users
    simply ignore such indicators even in the rather more dire case of
    mixed content warnings.
-
+   一旦用户检查了一次SAS，就需要密钥连续性以避免他们需要在每次调用时检查它。但是，由于第4.3.2.1节中所述的原因，这样是有问题的。原则上，当然可以呈现不同的UI元素来指示调用正在使用未经验证的密钥材料集（回想一下，攻击者可以只提供稍微不同的名称，攻击就可以在向一台新设备或者从未呼叫过的用户调用时显示相同的UI），但实际上即使在混合内容警告的更加严重的情况下，用户也会忽略这些指标。
 4.3.2.3.  Third Party Identity
 
    The conventional approach to providing communications identity has of
@@ -1068,6 +1078,10 @@ Internet-Draft               WebRTC Security                January 2018
 5.  Security Considerations
 
    This entire document is about security.
+
+5.安全注意事项
+ 
+   整个文档都是关于安全的。
 
 Rescorla                  Expires July 26, 2018                [Page 20]
 Internet-Draft               WebRTC Security                January 2018
