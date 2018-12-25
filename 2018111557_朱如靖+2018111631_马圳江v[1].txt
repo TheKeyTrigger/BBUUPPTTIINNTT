@@ -1,9 +1,10 @@
 封面
 名称：Security Considerations for WebRTC
       draft-ietf-rtcweb-security-10
-姓名：马圳江、朱如靖
-学号：马圳江：2018111631、朱如靖：2018111557
-邮箱：马圳江：mzj36900@bupt.edu.cn、朱如靖：zrj@bupt.edu.cn
+姓名：朱如靖、马圳江
+学号：朱如靖：2018111557； 马圳江：2018111631
+邮箱：朱如靖：zrj@bupt.edu.cn； 马圳江：mzj36900@bupt.edu.cn
+工作分配：朱如靖，4.1+（4.3.3.2——结束）共计5137字；马圳江，其他，共计6577字，整篇文档共计11714字。
 
 RTC-Web E. Rescorla
 Internet-Draft RTFM, Inc.
@@ -434,7 +435,7 @@ Internet-Draft               WebRTC Security                January 2018
    view anti cross-site request forgery tokens.
 	   These threats suggest that screen/application sharing might need a
    higher level of user consent than access to the camera or microphone.
-不太明显的威胁是对web安全模型的影响。同源策略的一个关键部分是来自站点A的HTML或JS可以可以引用站点B中的内容并导致浏览器加载它，但是（除非明确允许）看不到结果。但是，如果来自站点的web应用程序屏幕共享浏览器，则会违反该不变量，从而导致严重的安全后果。例如，攻击者网站可能会请求屏幕共享，然后使用屏幕共享来快速打开用户银行或网络邮件账户的新窗口，以读取生产的显示内容。更复杂的攻击将打开一个站点的源视图窗口，并使用屏幕共享结果来查看反跨站点请求伪造令牌。这些威胁表明与访问摄像头或麦克风相比，屏幕、应用程序共享可能需要更高级别的用户同意。
+   不太明显的威胁是对web安全模型的影响。同源策略的一个关键部分是来自站点A的HTML或JS可以可以引用站点B中的内容并导致浏览器加载它，但是（除非明确允许）看不到结果。但是，如果来自站点的web应用程序屏幕共享浏览器，则会违反该不变量，从而导致严重的安全后果。例如，攻击者网站可能会请求屏幕共享，然后使用屏幕共享来快速打开用户银行或网络邮件账户的新窗口，以读取生产的显示内容。更复杂的攻击将打开一个站点的源视图窗口，并使用屏幕共享结果来查看反跨站点请求伪造令牌。这些威胁表明与访问摄像头或麦克风相比，屏幕、应用程序共享可能需要更高级别的用户同意。
 
 4.1.2.  Calling Scenarios and User Expectations
 调用方案和用户期望
@@ -982,10 +983,6 @@ Internet-Draft               WebRTC Security                January 2018
    The conventional approach to providing communications identity has of
    course been to have some third party identity system (e.g., PKI) to
    authenticate the endpoints.  Such mechanisms have proven to be too
-
-Rescorla                  Expires July 26, 2018                [Page 18]
-Internet-Draft               WebRTC Security                January 2018
-
    cumbersome for use by typical users (and nearly too cumbersome for
    administrators).  However, a new generation of Web-based identity
    providers (BrowserID, Federated Google Login, Facebook Connect,
@@ -999,7 +996,13 @@ Internet-Draft               WebRTC Security                January 2018
    to authenticate the calling endpoints.  Calls which are authenticated
    in this fashion are naturally resistant even to active MITM attack by
    the calling site.
-
+   提供通信身份的传统方法，当然是具有一些第三方身份系统（例如，PKI）来验证端点。这种机制已被证明是
+   过于繁琐供一般用户的使用（过于繁琐对于管理员）。然而，最近开发了新一代基于Web的身份提供商
+   （BrowserID，Federated Google Login，Facebook Connect，OAuth，OpenID，WebFinger），并使用
+   Web 技术提供轻量级（从用户的角度来看）第三方认证交易。可以使用这种类型的系统来验证WebRTC呼叫，
+   将它们链接到现有用户的身份概念（例如，Facebook邻接）。具体而言，第三方身份系统用于将用户的身份
+   绑定到加密密钥材料，然后用于验证呼叫端点。经过身份验证的呼叫以这种方式即使对于主叫站点的主动MITM
+   攻击也是自然抗性的。
    Note that there is one special case in which PKI-style certificates
    do provide a practical solution: calls from end-users to large sites.
    For instance, if you are making a call to Amazon.com, then Amazon can
@@ -1009,7 +1012,10 @@ Internet-Draft               WebRTC Security                January 2018
    and the media peer are one in the same, but might be useful in cases
    in which third parties (e.g., ad networks or retailers) arrange for
    calls but do not participate in them.
-
+   请注意，有一种特殊情况，其中PKI样式的证书确实提供了实用的解决方案：从最终用户到大型站点的呼叫。
+   例如，如果您打电话给Amazon.com，那么亚马逊可以轻松获得证书来验证他们的媒体流量，就像他们获得一
+   个验证他们的网络流量一样。在呼叫站点和媒体对等体是同一个的情况下，这不提供额外的安全价值，但在第
+   三方（例如，广告网络或零售商）安排呼叫但不参与呼叫的情况下可能有用
 4.3.2.4.  Page Access to Media
 
    Identifying the identity of the far media endpoint is a necessary but
@@ -1029,9 +1035,16 @@ Internet-Draft               WebRTC Security                January 2018
    achieve this it will be necessary to cryptographically bind an
    indication of the local media access policy into the cryptographic
    authentication procedures detailed in the previous sections.
+4.3.2.4.  页面访问媒体
+   
+   识别远媒体端点的身份是提供媒体安全性的必要条件，但不是充分条件。在WebRTC中，媒体流被渲染为
+   HTML5 MediaStream，可以由调用站点操纵。显然，如果站点可以修改或查看媒体，那么用户无法获得他们期
+   望能够对其对等方进行身份验证的保证级别。在许多情况下，这是可以接受的，因为用户重视基于站点的特殊
+   效果，而不是来自站点的完全安全性。但是，也有用户希望知道该网站的情况不能干涉。为了促进这一点，有
+   必要提供一些功能，使网站可以可验证地放弃对媒体流的访问。必须可以从本地侧和远程侧进行此验证。即，
+   我必须能够验证我呼叫的人是否采用了安全媒体模式。为了实现这一点，有必要将本地媒体访问策略的指示加
+   密地绑定到前面部分中详述的加密认证过程中。
 
-Rescorla                  Expires July 26, 2018                [Page 19]
-Internet-Draft               WebRTC Security                January 2018
 
 4.3.3.  Malicious Peers
 
@@ -1043,13 +1056,16 @@ Internet-Draft               WebRTC Security                January 2018
    hiding or changing their appearance.  While technologies (DRM, etc.)
    do exist to attempt to address these issues, they are generally not
    compatible with open systems and WebRTC does not address them.
-
+4.3.3.  恶意同行
+  
+   我们通常不会试图阻止的一类攻击是恶意同行。例如，无论您采用何种保密措施，您正在与之交谈的人都可以记录呼叫并将其发布到互联网上。同样，我们也不会试图阻止他们使用语音或视频处理技术隐藏或改变其外观。虽然确实存在技术（DRM等）以试图解决这些问题，但它们通常与开放系统不兼容，并且WebRTC不解决它们。
    Similarly, we make no attempt to prevent prank calling or other
    unwanted calls.  In general, this is in the scope of the calling
    site, though because WebRTC does offer some forms of strong
    authentication, that may be useful as part of a defense against such
    attacks.
-
+   同样，我们不会试图阻止恶作剧电话或其他不必要的电话。通常，这是在调用的范围内网站，虽然因为WebRTC
+   确实提供了某种形式的强身份验证，这可能有助于防范此类攻击。
 4.4.  Privacy Considerations
 
 4.4.1.  Correlation of Anonymous Calls
@@ -1066,7 +1082,14 @@ Internet-Draft               WebRTC Security                January 2018
    mechanisms to allow sites intended for anonymous calling to force the
    minting of fresh identifiers.  In addition, IP addresses can be a
    source of call linkage [I-D.ietf-rtcweb-ip-handling]
-
+4.4.  隐私考虑因素
+4.4.1.  匿名呼叫的相关性
+   
+   虽然持久端点标识符可以是一个有用的安全功能（参见第4.3.2.1节，它们也可以代表用户希望匿名的设置中
+   的隐私威胁.WebRTC提供了许多可能的持久标识符，如DTLS证书（如果它们在连接之间重用）和RTCP 
+   CNAMES （如果根据[RFC6222]生成而不是[RFC7022]的隐私保护模式）。为了防止这种类型的关联，浏览器
+   需要提供重置这些标识符的机制（例如，与cookie的生命周期相同）。此外，API应该提供允许用于匿名呼叫
+   的站点强制创建新标识符的机制。此外，IP地址可以是呼叫链接的来源[ID.ietf-rtcweb-ip-handling]
 4.4.2.  Browser Fingerprinting
 
    Any new set of API features adds a risk of browser fingerprinting,
@@ -1074,7 +1097,9 @@ Internet-Draft               WebRTC Security                January 2018
    or absence of specific devices as a browser fingerprint.  In general,
    the API needs to be balanced between functionality and the
    incremental fingerprint risk.
-
+4.4.2.浏览器指纹识别
+  
+   任何新的API功能都会增加浏览器指纹识别的风险，WebRTC也不例外。具体而言，站点可以使用特定设备的存在或不存在作为浏览器指纹。通常，API需要在功能和增量指纹风险之间进行平衡。
 5.  Security Considerations
 
    This entire document is about security.
